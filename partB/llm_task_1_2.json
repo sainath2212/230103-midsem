@@ -1,0 +1,129 @@
+{
+    "student_metadata": {
+        "name": "Meesala Sree Sai Nath",
+        "roll_number": "230103",
+        "course": "Advanced Machine Learning",
+        "exam": "Mid-Semester Examination",
+        "part": "Part B",
+        "task": "Task 1.2 - Key Assumptions",
+        "submission_date": "2026-03-08",
+        "primary_ai_model": "Claude Sonnet 4.6"
+    },
+    "llm_tools_used": [
+        {
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "provider": "Anthropic"
+        }
+    ],
+    "full_llm_interaction_log": [
+        {
+            "interaction_id": 1,
+            "date": "2026-03-08",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.2",
+            "purpose": "Identifying the three strongest assumptions in the paper",
+            "prompt": "I need to identify three key assumptions in the BSGD paper. I found the bounded gradient norm assumption in Theorem 1. What are two more that are specific enough to this paper to be worth discussing?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Helped narrow to: (1) Budget Representability, (2) bounded gradient norm, (3) stationary i.i.d data stream. Each is tied to the convergence analysis.",
+            "student_verification": "Cross-referenced each assumption against the theorem statements in Sections 4 and 5.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 2,
+            "date": "2026-03-08",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.2",
+            "purpose": "Understanding what happens when Budget Representability is violated",
+            "prompt": "If the true decision boundary requires hundreds of SVs but we cap it at B=3, what actually happens to the learned model mathematically? Does training diverge?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Explained that training does not diverge, but the convergence bound becomes vacuous because the average degradation E_bar is very large, making the Theorem 1 upper bound loose.",
+            "student_verification": "Confirmed by running B=3 on the 8x8 checkerboard in task_3_2 and seeing accuracy drop to near random.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 3,
+            "date": "2026-03-08",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.2",
+            "purpose": "Checking whether i.i.d assumption is explicit or implicit in the paper",
+            "prompt": "Does the BSGD paper explicitly state an i.i.d assumption about the training data, or is it just implicit in the stochastic gradient analysis?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Confirmed it is implicit: the online SGD analysis in Section 4 assumes each sample is drawn i.i.d., though the paper does not call it out by name.",
+            "student_verification": "Searched the paper for the word 'independent' and found it only in the context of ablation independence, not data.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 4,
+            "date": "2026-03-08",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.2",
+            "purpose": "Writing the violation scenario for the bounded gradient assumption",
+            "prompt": "How can I construct a concrete dataset where the bounded gradient norm assumption is violated? What would happen to the algorithm in that case?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Suggested using extreme feature values or unscaled features. Without bounded gradients, the learning rate clipping fails and weights can grow unboundedly.",
+            "student_verification": "Tested by removing feature scaling in task_2_1 and observing NaN weights after a few iterations.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 5,
+            "date": "2026-03-08",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.2",
+            "purpose": "Structuring the three assumptions clearly in notebook markdown",
+            "prompt": "I have three assumptions. Can you help me format each one as a markdown block with: Assumption name, Paper reference, Plain language description, and Violation scenario?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided a clean four-part markdown template that matched the expected notebook structure.",
+            "student_verification": "Compared the template against Task 1.2 instructions, confirmed all elements are present.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        }
+    ],
+    "top_5_prompts": [
+        {
+            "rank": 1,
+            "interaction_id": 1,
+            "prompt": "I need to identify three key assumptions in the BSGD paper. I found the bounded gradient norm assumption in Theorem 1. What are two more that are specific enough to this paper to be worth discussing?",
+            "why_important": "Choosing assumptions tied directly to the theoretical results makes the analysis more precise."
+        },
+        {
+            "rank": 2,
+            "interaction_id": 2,
+            "prompt": "If the true decision boundary requires hundreds of SVs but we cap it at B=3, what actually happens to the learned model mathematically? Does training diverge?",
+            "why_important": "This was the theoretical grounding for my violation scenario description."
+        },
+        {
+            "rank": 3,
+            "interaction_id": 3,
+            "prompt": "Does the BSGD paper explicitly state an i.i.d assumption about the training data, or is it just implicit in the stochastic gradient analysis?",
+            "why_important": "Distinguishing explicit vs. implicit assumptions was important for honest documentation."
+        },
+        {
+            "rank": 4,
+            "interaction_id": 4,
+            "prompt": "How can I construct a concrete dataset where the bounded gradient norm assumption is violated? What would happen to the algorithm in that case?",
+            "why_important": "A concrete code-backed violation makes the assumption analysis much stronger."
+        },
+        {
+            "rank": 5,
+            "interaction_id": 5,
+            "prompt": "I have three assumptions. Can you help me format each one as a markdown block with: Assumption name, Paper reference, Plain language description, and Violation scenario?",
+            "why_important": "Consistent formatting across all three assumptions makes the notebook easy to mark."
+        }
+    ],
+    "student_declaration": {
+        "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for Task 1.2. The choice of which three assumptions to highlight and the violation scenarios I described are my own decisions.",
+        "understanding_acknowledged": true,
+        "signature": "Meesala Sree Sai Nath",
+        "date": "2026-03-08"
+    }
+}

@@ -1,0 +1,174 @@
+% IEEE Conference Paper Format
+\documentclass[conference,10pt]{IEEEtran}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{cite}
+
+\begin{document}
+
+\title{Reproduction and Analysis of Budgeted Stochastic Gradient Descent for Large-Scale SVM Training}
+
+\author{
+\IEEEauthorblockN{Meesala Sree Sai Nath}
+\IEEEauthorblockA{Roll Number: 230103 \\
+Advanced Machine Learning \\
+Mid-Semester Examination, Part B}
+}
+
+\maketitle
+
+\begin{abstract}
+This report presents a reproduction, ablation study, and failure analysis of the Budgeted Stochastic Gradient Descent (BSGD) framework proposed by Wang, Crammer, and Vucetic (JMLR, 2012). The paper addresses the scalability challenge of kernel SVMs by imposing a fixed budget on the number of support vectors maintained during online training. I reproduce the BPegasos algorithm with all three budget maintenance strategies (removal, projection, merging) on a synthetic Checkerboard dataset, confirming the paper's central finding that merging outperforms the other strategies. Ablation experiments validate the importance of the merging strategy and the regularisation term. A failure analysis demonstrates that the method collapses when the budget is too small relative to boundary complexity.
+\end{abstract}
+
+\section{Paper Summary}
+
+Wang, Crammer, and Vucetic~\cite{wang2012} address the fundamental scalability limitation of kernel SVMs: as training proceeds via stochastic gradient descent to minimise the primal objective:
+\begin{equation}
+\min_w \frac{\lambda}{2} \|w\|^2 + \frac{1}{N} \sum_{i=1}^N \max(0, 1 - y_i f(x_i))
+\end{equation}
+the number of support vectors grows linearly with the data, leading to quadratic training time and unbounded memory. To overcome this, they propose the BSGD framework, which enforces a hard upper limit (budget $B$) on the number of support vectors maintained at any time.
+
+Their main algorithm, BPegasos, extends the Pegasos online SVM solver~\cite{pegasos2011} by adding a budget maintenance step after each SGD update. Three strategies are proposed: removal (discarding the least important SV), projection (redistributing its weight to remaining SVs via kernel matrix inversion), and merging (combining two nearby SVs into a single representative at a weighted midpoint).
+
+The mathematics of the merging strategy are what differentiate BSGD from trivial subsampling. Rather than sacrificing information, merging actively minimises the weight degradation $\|\Delta_t\|^2$ between the full $B+1$ model and the compressed $B$ model:
+\begin{equation}
+\|\Delta_t\|^2 = \min_{z, \alpha_z} \| \alpha_m \Phi(x_m) + \alpha_n \Phi(x_n) - \alpha_z \Phi(z) \|^2
+\end{equation}
+By solving this local optimisation problem over the Reproducing Kernel Hilbert Space (RKHS), the merging step pinpoints the two SVs ($x_m, x_n$) that are nearest neighbours. It then replaces them with a new synthetic support vector $z$, mathematically positioned such that the newly assigned weight $\alpha_z$ perfectly balances the mass of both discarded vectors. This ensures the geometric shift of the decision boundary is strictly bounded.
+
+The authors provide formal convergence bounds (Theorems 1 through 3) showing that the gap between the budgeted and optimal solution depends on the average weight degradation~$\bar{E}$ introduced by budget maintenance. Extensive experiments on 15 datasets demonstrate that BPegasos+merge achieves accuracy competitive with unbounded SVMs while reducing training cost from $O(N^2)$ to $O(NB)$ and model size to exactly $B$ support vectors. This decoupling of the model capacity from the dataset size guarantees that kernel scale linearly with data streams.
+
+\section{Reproduction Results}
+
+I reproduced BPegasos with all three budget maintenance strategies on a synthetic 2D Checkerboard dataset (4$\times$4 grid, 2000 samples) as illustrated in Figure~\ref{fig:dataset}. To capture the highly non-linear decision boundary, I used the Gaussian RBF kernel formulation:
+\begin{equation}
+k(x_i, x_j) = \exp\left(-\frac{\|x_i - x_j\|^2}{2\sigma^2}\right)
+\end{equation}
+with the kernel width configured to $\sigma = 0.125$, regularisation parameter $\lambda = 10^{-4}$, and a hard memory limit budget of $B = 50$. Training ran for 5 epochs.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.8\linewidth]{checkerboard_dataset.png}}
+\caption{The 4x4 Checkerboard dataset generated with 2,000 samples and 10\% label noise, serving as the benchmark for our spatial classification boundary tests.}
+\label{fig:dataset}
+\end{figure}
+
+BPegasos+merge achieved the highest accuracy among the budgeted variants, followed by projection, then removal. This ordering strictly matches the paper's findings in Table~6 and Figure~5. A detailed performance breakdown is provided in Table~\ref{tab:results}. Furthermore, the classification stability of the Merge strategy across varying values of Budget ($B$) and Kernel Width ($\sigma$) is illustrated by the hyperparameter sensitivity heatmap in Figure~\ref{fig:hyperparam}.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{hyperparam_heatmap.png}}
+\caption{Hyperparameter sensitivity heatmap showing test accuracy across different budgets and RBF widths.}
+\label{fig:hyperparam}
+\end{figure}
+
+The absolute accuracy values differ from the paper because our dataset has only 2,000 samples versus the paper's 10 million, our budget is $B=50$ versus $B=100$, and we did not perform exhaustive hyperparameter tuning via cross-validation. However, as shown below, the trends perfectly mirror the original publication.
+
+\begin{table}[htbp]
+\centering
+\caption{Reproduction Results (4x4 Checkerboard, $B=50$)}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Strategy} & \textbf{Accuracy} & \textbf{Final SV Count} & \textbf{Time} \\
+\hline
+LIBSVM (Upper Bound) & 96.0\% & 710 & Base \\
+BPegasos+Merge & 94.5\% & 50 & Faster \\
+BPegasos+Project & 92.1\% & 50 & Slower \\
+BPegasos+Remove & 81.3\% & 50 & Fastest \\
+\hline
+\end{tabular}
+\label{tab:results}
+\vspace{0.2cm}
+\end{table}
+
+To further illustrate this, Figure~\ref{fig:evolution} plots the test accuracy evolution.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{accuracy_evolution.png}}
+\caption{Evolution of test accuracy over the data stream. Merging shows smooth continuous improvement, while Removal stagnates.}
+\label{fig:evolution}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{decision_boundaries.png}}
+\caption{2D contour map comparing the decision boundaries of all three strategies against the ground-truth checkerboard structure.}
+\label{fig:2dboundary}
+\end{figure}
+
+Despite these differences, the relative performance ordering (merge $>$ project $>$ remove) is fully consistent with the paper's central claims. The qualitative behaviour also matches: removal causes accuracy stagnation while merge shows steady improvement over the training stream, consistent with Figure~5a.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{decision_surface_3d.png}}
+\caption{3D decision surface generated by BPegasos+merge showing the capture of the non-linear manifold.}
+\label{fig:3dsurface}
+\end{figure}
+
+\section{Ablation Findings}
+
+\textbf{Ablation 1: Replacing merge with removal.} Removing the merging strategy and replacing it with simple SV removal caused a dramatic accuracy drop. This confirms that merging is the single most important component of BPegasos. The paper reports over 20 percentage points difference between merge and remove on Checkerboard at $B=100$ (Table~6: 99.55\% vs 79.19\%). The reason is that removal completely discards the information carried by the removed SV, while merging preserves it. The weight degradation $\|\Delta_t\|$ (Equation~12) is substantially larger for removal, directly increasing the optimality gap in Theorem~1.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{ablation1_merge_vs_remove.png}}
+\caption{Direct bar chart comparison of the Merge and Remove strategies compared against the unbounded LIBSVM upper bound.}
+\label{fig:ablation1bar}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{ablation1_divergence_heatmap.png}}
+\caption{Information loss heatmap illustrating where the Removal strategy diverges from Merging structurally.}
+\label{fig:ablation1}
+\end{figure}
+
+\textbf{Ablation 2: Removing regularisation.} Setting $\lambda \approx 0$ disrupted the learning dynamics in multiple ways. Without regularisation, the coefficient decay factor $(1 - \eta_t \lambda) \approx 1$, so old SV coefficients never shrink. Furthermore, because the BPegasos algorithm dictates a learning rate schedule defined asymptotically by:
+\begin{equation}
+\eta_t = \frac{1}{\lambda t}
+\end{equation}
+setting the regularisation penalty too low causes the learning rate to violently explode, requiring manual clipping for numerical stability. This reveals that regularisation serves a dual purpose: it controls generalisation complexity and geometrically shapes the learning rate decay schedule for smooth gradient convergence.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{ablation2_regularisation.png}}
+\caption{Impact of removing $L_2$ regularization on classification accuracy.}
+\label{fig:ablation2}
+\end{figure}
+
+\section{Failure Mode}
+
+I constructed a scenario where BPegasos+merge fails: $B = 3$ on an 8$\times$8 Checkerboard (64 cells). The model's accuracy dropped to near-random ($\sim$50\%), far below both $B=50$ and LIBSVM.
+
+This failure is a direct consequence of violating the Budget Representability assumption. The 8$\times$8 checkerboard has an intricate boundary requiring hundreds of SVs. With only 3~SVs, budget maintenance fires on virtually every training example. After thousands of merges, the SVs converge to meaningless averaged positions. The convergence bound (Theorem~1) includes the term $2U\bar{E}$, and when $\bar{E}$ is very large the bound becomes vacuous.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{failure_mode_collapse_grid.png}}
+\caption{Progressive collapse of the decision boundary as budget decreases from 50 to 2.}
+\label{fig:collapse}
+\end{figure}
+
+An accuracy-vs-budget sweep confirmed that performance degrades sharply below $B \approx 10$ and collapses below $B \approx 5$, perfectly illustrating the spatial memory limit of the algorithm. This is clearly shown in Figure~\ref{fig:fail_curve}. A potential fix would be adaptive budget sizing that monitors $\bar{E}$ and increases $B$ when weight degradation exceeds a threshold.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\linewidth]{failure_mode_accuracy_vs_budget.png}}
+\caption{The sharp non-linear descent of test accuracy as the SV Budget ($B$) drops below the minimum required spatial complexity.}
+\label{fig:fail_curve}
+\end{figure}
+
+\section{Reflection}
+
+What I could not implement: the multi-class extension (Section~5), the Woodbury formula for efficient kernel matrix inversion in projection (Section~6.2), and the Norma and BMP variants (Tables~1 and 2). These would require substantially more engineering effort.
+
+What surprised me: I was struck by how dramatically the removal strategy fails compared to merging. The paper's numbers (79\% vs 99\%) seemed like an extreme difference, but my reproduction confirmed this gap is real and robust. I was also surprised by how sensitive the algorithm is to the learning rate schedule: removing regularisation did not just affect overfitting but destabilised the entire training dynamics.
+
+Furthermore, the tension between budget capacity and spatial complexity became glaringly obvious during the ablation studies. A fixed budget classifier does not fail gracefully. As demonstrated on the 8$\times$8 Checkerboard, once the structural minimum for boundary representation is violated, the generalisation capacity collapses non-linearly to random chance.
+
+What I would revisit: Given more time, I would implement projection more efficiently using the Woodbury formula, run experiments on real-world datasets (e.g., USPS), and explore the adaptive budget idea from my failure analysis. I would also investigate memory-augmented variants that decay older support vectors using a "Forgetron" style time-weighting penalty~\cite{forgetron2008}, combining the strengths of online bounds with geographic merging.
+
+\begin{thebibliography}{9}
+\bibitem{wang2012} Z.~Wang, K.~Crammer, S.~Vucetic, ``Breaking the Curse of Kernelization: Budgeted Stochastic Gradient Descent for Large-Scale SVM Training,'' \emph{JMLR}, vol.~13, pp.~3103--3131, 2012.
+\bibitem{pegasos2011} S.~Shalev-Shwartz, Y.~Singer, N.~Srebro, A.~Cotter, ``Pegasos: Primal Estimated sub-GrAdient SOlver for SVM,'' \emph{Mathematical Programming}, 2011.
+\bibitem{forgetron2008} O.~Dekel, S.~Shalev-Shwartz, Y.~Singer, ``The Forgetron: A Kernel-Based Perceptron on a Budget,'' \emph{SIAM Journal on Computing}, 2008.
+\bibitem{sklearn2011} F.~Pedregosa et al., ``Scikit-learn: Machine Learning in Python,'' \emph{JMLR}, vol.~12, pp.~2825--2830, 2011.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,129 @@
+{
+    "student_metadata": {
+        "name": "Meesala Sree Sai Nath",
+        "roll_number": "230103",
+        "course": "Advanced Machine Learning",
+        "exam": "Mid-Semester Examination",
+        "part": "Part B",
+        "task": "Task 1.1 - Core Contribution / Architecture",
+        "submission_date": "2026-03-07",
+        "primary_ai_model": "Claude Sonnet 4.6"
+    },
+    "llm_tools_used": [
+        {
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "provider": "Anthropic"
+        }
+    ],
+    "full_llm_interaction_log": [
+        {
+            "interaction_id": 1,
+            "date": "2026-03-07",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.1",
+            "purpose": "Understanding the ordering of Algorithm 1 steps",
+            "prompt": "I'm reading Algorithm 1 from the BSGD paper. There are three stages: coefficient decay, the hinge loss check, and budget maintenance. Can you walk me through the correct ordering of these, and explain why decay has to happen before the loss check?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Clarified that decay shrinks all existing coefficients first, then the loss decides if a new SV is added, and budget maintenance fires only if count exceeds B.",
+            "student_verification": "Verified by re-reading Algorithm 1 lines 4 to 13 in the paper line by line.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 2,
+            "date": "2026-03-07",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.1",
+            "purpose": "Explaining the three budget maintenance strategies in plain language",
+            "prompt": "Can you explain the difference between removal, projection, and merging as budget maintenance strategies? I need to explain them to someone who understands SVMs but has not read this paper.",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Gave a plain-language summary: removal drops info, projection redistributes info, merging compresses info. Provided the classmate-style framing I needed.",
+            "student_verification": "Checked against Section 3.1 to 3.3. The paper's descriptions match this ordering of trade-offs.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 3,
+            "date": "2026-03-07",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.1",
+            "purpose": "Understanding what weight degradation Delta_t represents geometrically",
+            "prompt": "What does the term weight degradation Delta_t actually represent in RKHS geometry? And why does minimising it keep the decision boundary from shifting too far?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Explained that Delta_t is the RKHS-distance between the full B+1 weight vector and the compressed B vector. Minimising this minimises boundary displacement.",
+            "student_verification": "Traced to Equation 12 and the paragraph after Theorem 1.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 4,
+            "date": "2026-03-07",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.1",
+            "purpose": "Clarifying when the algorithm skips the budget step",
+            "prompt": "Does BPegasos always run budget maintenance on every training example, or does it skip it if the SV count is already within budget?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Confirmed the algorithm only triggers maintenance when the SV count exceeds B - it is a conditional step, not constant overhead.",
+            "student_verification": "Line 13 of Algorithm 1 confirms the conditional check explicitly.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 5,
+            "date": "2026-03-07",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 1.1",
+            "purpose": "Proofreading the classmate explanation for clarity",
+            "prompt": "Here is my Step 2 explanation for BPegasos (the coefficient decay step). Can you help me tighten it so a classmate who knows online learning but has not read this paper can follow it quickly?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Identified one sentence that assumed familiarity with the Pegasos paper. Rewrote it to stand alone.",
+            "student_verification": "Read the revised version to two classmates - both confirmed it was clear.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        }
+    ],
+    "top_5_prompts": [
+        {
+            "rank": 1,
+            "interaction_id": 1,
+            "prompt": "I'm reading Algorithm 1 from the BSGD paper. There are three stages: coefficient decay, the hinge loss check, and budget maintenance. Can you walk me through the correct ordering of these, and explain why decay has to happen before the loss check?",
+            "why_important": "Correct step ordering was essential for writing an accurate, detailed walkthrough."
+        },
+        {
+            "rank": 2,
+            "interaction_id": 2,
+            "prompt": "Can you explain the difference between removal, projection, and merging as budget maintenance strategies? I need to explain them to someone who understands SVMs but has not read this paper.",
+            "why_important": "The task explicitly asked for a classmate-facing explanation, so I needed language that avoided jargon."
+        },
+        {
+            "rank": 3,
+            "interaction_id": 3,
+            "prompt": "What does the term weight degradation Delta_t actually represent in RKHS geometry? And why does minimising it keep the decision boundary from shifting too far?",
+            "why_important": "Understanding this was essential for explaining Step 6 (Maintain Budget) with mathematical depth."
+        },
+        {
+            "rank": 4,
+            "interaction_id": 4,
+            "prompt": "Does BPegasos always run budget maintenance on every training example, or does it skip it if the SV count is already within budget?",
+            "why_important": "This affected how I explained the computational cost per iteration in Step 5 of my writeup."
+        },
+        {
+            "rank": 5,
+            "interaction_id": 5,
+            "prompt": "Here is my Step 2 explanation for BPegasos (the coefficient decay step). Can you help me tighten it so a classmate who knows online learning but has not read this paper can follow it quickly?",
+            "why_important": "The task asked for classmate-facing language, so readability mattered as much as accuracy."
+        }
+    ],
+    "student_declaration": {
+        "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for Task 1.1. The decisions about how to structure my step-by-step explanation and which aspects to emphasise are my own.",
+        "understanding_acknowledged": true,
+        "signature": "Meesala Sree Sai Nath",
+        "date": "2026-03-07"
+    }
+}

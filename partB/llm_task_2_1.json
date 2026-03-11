@@ -1,0 +1,129 @@
+{
+    "student_metadata": {
+        "name": "Meesala Sree Sai Nath",
+        "roll_number": "230103",
+        "course": "Advanced Machine Learning",
+        "exam": "Mid-Semester Examination",
+        "part": "Part B",
+        "task": "Task 2.1 - Dataset Selection and Setup",
+        "submission_date": "2026-03-09",
+        "primary_ai_model": "Claude Sonnet 4.6"
+    },
+    "llm_tools_used": [
+        {
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "provider": "Anthropic"
+        }
+    ],
+    "full_llm_interaction_log": [
+        {
+            "interaction_id": 1,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.1",
+            "purpose": "Choosing the right toy dataset to match the paper's experiments",
+            "prompt": "I need a 2D toy dataset to reproduce BPegasos. The paper uses a Checkerboard in Table 6. How do I generate a 4x4 checkerboard grid dataset in numpy without any built-in sklearn functions?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided a clean numpy-based grid generator using meshgrid and modular arithmetic for class labels.",
+            "student_verification": "Generated and plotted the output. The class boundaries are clearly non-linear and match Figure 4 in the paper.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 2,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.1",
+            "purpose": "Adding controlled label noise to the dataset",
+            "prompt": "What is the standard way to add 10% label noise to a binary classification dataset without breaking reproducibility? Do I use a separate random seed for this step?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Showed how to use the same global RANDOM_SEED with numpy.random.choice to flip a fixed fraction of labels.",
+            "student_verification": "Confirmed that running the noise step twice with the same seed produces identical noisy datasets.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 3,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.1",
+            "purpose": "Setting up a reproducible 80/20 train/test split",
+            "prompt": "If I use sklearn's train_test_split with random_state=RANDOM_SEED, is the split guaranteed to be identical every time regardless of sklearn version?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Explained that the split is deterministic given the same random_state, but shuffle order may vary across sklearn versions. Suggested also printing the split sizes to verify.",
+            "student_verification": "Checked sklearn docs and confirmed random_state controls the internal random number generator.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 4,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.1",
+            "purpose": "Visualising the dataset clearly for the report",
+            "prompt": "How do I plot a 2D checkerboard dataset as a scatter plot where each class has a different colour, and the axes are cleanly labelled for an IEEE report figure?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided matplotlib code with explicit color mapping, tight layout, and readable tick sizes suitable for a two-column IEEE figure.",
+            "student_verification": "Compared the output to Figure 4a in the paper. Class assignments and boundary structure match.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 5,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.1",
+            "purpose": "Justifying the dataset choice in the markdown cell",
+            "prompt": "How do I write a convincing 3-sentence justification for why the 4x4 Checkerboard is the right dataset for reproducing BPegasos? What should I focus on?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Suggested focusing on: (1) direct experimental match with Table 6, (2) the highly non-linear boundary that stresses budget limits, (3) the 2D structure enabling visible decision boundary plots.",
+            "student_verification": "Used all three points in the markdown cell and they are each defensible from the paper text.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        }
+    ],
+    "top_5_prompts": [
+        {
+            "rank": 1,
+            "interaction_id": 1,
+            "prompt": "I need a 2D toy dataset to reproduce BPegasos. The paper uses a Checkerboard in Table 6. How do I generate a 4x4 checkerboard grid dataset in numpy without any built-in sklearn functions?",
+            "why_important": "The dataset selection had to match the paper's specific evaluation benchmark for the reproduction to be fair."
+        },
+        {
+            "rank": 2,
+            "interaction_id": 2,
+            "prompt": "What is the standard way to add 10% label noise to a binary classification dataset without breaking reproducibility? Do I use a separate random seed for this step?",
+            "why_important": "10% label noise is needed to make the task realistic, and the reproducibility constraint required seed control."
+        },
+        {
+            "rank": 3,
+            "interaction_id": 3,
+            "prompt": "If I use sklearn's train_test_split with random_state=RANDOM_SEED, is the split guaranteed to be identical every time regardless of sklearn version?",
+            "why_important": "Version-independent reproducibility was a core requirement of the checklist in Task 2.3."
+        },
+        {
+            "rank": 4,
+            "interaction_id": 4,
+            "prompt": "How do I plot a 2D checkerboard dataset as a scatter plot where each class has a different colour, and the axes are cleanly labelled for an IEEE report figure?",
+            "why_important": "The figure is used in both the notebook and the report, so quality standards had to match publication conventions."
+        },
+        {
+            "rank": 5,
+            "interaction_id": 5,
+            "prompt": "How do I write a convincing 3-sentence justification for why the 4x4 Checkerboard is the right dataset for reproducing BPegasos? What should I focus on?",
+            "why_important": "The dataset justification was explicitly listed as a sub-requirement in the task instructions."
+        }
+    ],
+    "student_declaration": {
+        "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for Task 2.1. The choice of dataset (Checkerboard) and the justification for why it's appropriate are based on my reading of the paper's experimental section.",
+        "understanding_acknowledged": true,
+        "signature": "Meesala Sree Sai Nath",
+        "date": "2026-03-09"
+    }
+}

@@ -1,0 +1,129 @@
+{
+    "student_metadata": {
+        "name": "Meesala Sree Sai Nath",
+        "roll_number": "230103",
+        "course": "Advanced Machine Learning",
+        "exam": "Mid-Semester Examination",
+        "part": "Part B",
+        "task": "Task 2.2 - Implementation with Paper References",
+        "submission_date": "2026-03-09",
+        "primary_ai_model": "Claude Sonnet 4.6"
+    },
+    "llm_tools_used": [
+        {
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "provider": "Anthropic"
+        }
+    ],
+    "full_llm_interaction_log": [
+        {
+            "interaction_id": 1,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.2",
+            "purpose": "Designing the BPegasos class to be sklearn-compatible",
+            "prompt": "I want to implement BPegasos as a Python class with fit(), predict(), and score() methods so it can work with sklearn pipelines. What is the minimal class skeleton I need?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided a clean class skeleton with __init__ storing hyperparameters, fit() receiving X_train and y_train, and predict() returning label arrays.",
+            "student_verification": "Confirmed the interface works by calling sklearn.metrics.accuracy_score directly on the output of predict().",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 2,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.2",
+            "purpose": "Implementing the RBF kernel function efficiently",
+            "prompt": "What is the fastest vectorized numpy way to compute the RBF kernel between a single point x and all support vectors simultaneously? I need it inside a training loop.",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Showed how to expand the squared distance using broadcasting: ||x - sv||^2 can be computed as a matrix subtraction followed by a sum over axis=1.",
+            "student_verification": "Benchmarked against a naive loop over 1000 SVs. Vectorized version is 40x faster.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 3,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.2",
+            "purpose": "Implementing the budget merge step correctly",
+            "prompt": "I need to implement the merge step from Algorithm 2 in the BSGD paper. When budget overflows, I find the two nearest SVs and replace them with one. How do I compute the new alpha and position of the merged SV?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Explained that alpha_z = alpha_m + alpha_n, and the new position z is the weighted midpoint: z = (|alpha_m|*x_m + |alpha_n|*x_n) / (|alpha_m| + |alpha_n|).",
+            "student_verification": "Matched this against Equation 13 in Section 3.3 of the paper. The formula is correct.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 4,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.2",
+            "purpose": "Debugging a NaN in the learning rate",
+            "prompt": "My BPegasos training loop is producing NaN weights after about 50 iterations. The learning rate formula is eta_t = 1 / (lambda * t). What is going wrong?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Identified that lambda was accidentally set to 0 in the hyperparameter block, causing division by zero. Also suggested clipping eta_t to a maximum value as a safety measure.",
+            "student_verification": "Fixed the lambda value and added an assert that LAMBDA > 0 at the top of the notebook.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 5,
+            "date": "2026-03-09",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 2.2",
+            "purpose": "Adding paper reference comments to each algorithmic step",
+            "prompt": "I have my BPegasos fit() method working. Can you help me annotate each section of the code with the corresponding equation or line number from the Wang et al. 2012 paper?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Mapped: decay step to Algorithm 1 Line 5, loss check to Line 7, SV append to Line 9, budget maintenance call to Line 13.",
+            "student_verification": "Opened the paper alongside the code and confirmed each annotation is on the correct line.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        }
+    ],
+    "top_5_prompts": [
+        {
+            "rank": 1,
+            "interaction_id": 1,
+            "prompt": "I want to implement BPegasos as a Python class with fit(), predict(), and score() methods so it can work with sklearn pipelines. What is the minimal class skeleton I need?",
+            "why_important": "A standard sklearn-compatible interface allows easy comparison with LIBSVM (sklearn SVC) in Task 2.3."
+        },
+        {
+            "rank": 2,
+            "interaction_id": 2,
+            "prompt": "What is the fastest vectorized numpy way to compute the RBF kernel between a single point x and all support vectors simultaneously? I need it inside a training loop.",
+            "why_important": "The kernel is the computational bottleneck inside the training loop, so efficiency matters."
+        },
+        {
+            "rank": 3,
+            "interaction_id": 3,
+            "prompt": "I need to implement the merge step from Algorithm 2 in the BSGD paper. When budget overflows, I find the two nearest SVs and replace them with one. How do I compute the new alpha and position of the merged SV?",
+            "why_important": "The merge step is the most complex and most important part of the implementation."
+        },
+        {
+            "rank": 4,
+            "interaction_id": 4,
+            "prompt": "My BPegasos training loop is producing NaN weights after about 50 iterations. The learning rate formula is eta_t = 1 / (lambda * t). What is going wrong?",
+            "why_important": "This debugging session directly informed the regularisation ablation in Task 3.1."
+        },
+        {
+            "rank": 5,
+            "interaction_id": 5,
+            "prompt": "I have my BPegasos fit() method working. Can you help me annotate each section of the code with the corresponding equation or line number from the Wang et al. 2012 paper?",
+            "why_important": "The task instructions specifically required paper reference annotations in the implementation."
+        }
+    ],
+    "student_declaration": {
+        "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for Task 2.2. The overall algorithm design, class structure, and paper annotation approach are my own work.",
+        "understanding_acknowledged": true,
+        "signature": "Meesala Sree Sai Nath",
+        "date": "2026-03-09"
+    }
+}

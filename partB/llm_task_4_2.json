@@ -1,0 +1,129 @@
+{
+    "student_metadata": {
+        "name": "Meesala Sree Sai Nath",
+        "roll_number": "230103",
+        "course": "Advanced Machine Learning",
+        "exam": "Mid-Semester Examination",
+        "part": "Part B",
+        "task": "Task 4.2 - LLM Usage Disclosure",
+        "submission_date": "2026-03-11",
+        "primary_ai_model": "Claude Sonnet 4.6"
+    },
+    "llm_tools_used": [
+        {
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "provider": "Anthropic"
+        }
+    ],
+    "full_llm_interaction_log": [
+        {
+            "interaction_id": 1,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.2",
+            "purpose": "Understanding the required JSON structure for LLM usage disclosure",
+            "prompt": "The instructions say I need to log my LLM interactions with specific fields including task_tag, code_used_verbatim, and student_modification. Can you show me a minimal example of one correctly structured interaction object?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided a full example JSON object with all required fields, including the top_5_prompts outer section and student_declaration block.",
+            "student_verification": "Compared the example against the Part A LLM format requirements listed in the PDF. All fields are present.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 2,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.2",
+            "purpose": "Running a mass replacement script to fix the AI model name across all files",
+            "prompt": "I have 10 JSON files and the model name in all of them needs to be changed from 'GPT-5.2' to 'Claude Sonnet 4.6'. What is the safest Python script to do this without corrupting the JSON?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Recommended using json.load + in-memory dict modification + json.dump rather than string replacement, to avoid accidentally changing nested values or breaking structure.",
+            "student_verification": "Ran the script and validated all 10 files with json.load() to confirm they parse correctly after modification.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 3,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.2",
+            "purpose": "Checking that all required fields are present in each file",
+            "prompt": "How do I write a Python validation script that checks all 10 of my LLM JSON files for required fields and prints any that are missing?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided a loop that checks for: student_metadata, llm_tools_used, full_llm_interaction_log, top_5_prompts, and student_declaration. Reports missing fields per file.",
+            "student_verification": "Ran the validator and confirmed all 10 files passed all checks.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 4,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.2",
+            "purpose": "Writing the student_declaration block for all 10 files",
+            "prompt": "Can you help me write a student declaration statement for the LLM usage JSON that is specific to Task 4.2, which is about managing and structuring the LLM logs rather than doing an analysis task?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Suggested: 'I declare this file contains a complete and honest record of LLM usage. The decisions about which interactions to log, how to structure them, and the top 5 ranking are entirely my own.'",
+            "student_verification": "Reviewed against the Part A declaration template to ensure consistent phrasing.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 5,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.2",
+            "purpose": "Removing unicode em-dash characters from the metadata fields",
+            "prompt": "Some of my JSON task fields contain the character \u2014 (em-dash, unicode U+2014). This was causing issues when another script tried to parse the file. How do I clean this out of all 10 files at once?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided a one-liner using content.replace('\\u2014', '-') in a file-reading loop. Simple and safe for this case.",
+            "student_verification": "After running the replacement, all 10 files were re-validated with json.load() and no encoding errors appeared.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        }
+    ],
+    "top_5_prompts": [
+        {
+            "rank": 1,
+            "interaction_id": 1,
+            "prompt": "The instructions say I need to log my LLM interactions with specific fields including task_tag, code_used_verbatim, and student_modification. Can you show me a minimal example of one correctly structured interaction object?",
+            "why_important": "Getting the JSON structure right from the start avoided having to reformat all 10 files later."
+        },
+        {
+            "rank": 2,
+            "interaction_id": 2,
+            "prompt": "I have 10 JSON files and the model name in all of them needs to be changed from 'GPT-5.2' to 'Claude Sonnet 4.6'. What is the safest Python script to do this without corrupting the JSON?",
+            "why_important": "A structured JSON-aware replacement is safer than regex-based string replacement for structured data."
+        },
+        {
+            "rank": 3,
+            "interaction_id": 3,
+            "prompt": "How do I write a Python validation script that checks all 10 of my LLM JSON files for required fields and prints any that are missing?",
+            "why_important": "A file is only marked correct if all required fields are present, so systematic validation was essential."
+        },
+        {
+            "rank": 4,
+            "interaction_id": 4,
+            "prompt": "Can you help me write a student declaration statement for the LLM usage JSON that is specific to Task 4.2, which is about managing and structuring the LLM logs rather than doing an analysis task?",
+            "why_important": "Each of the 10 files requires its own declaration, and they should be task-specific rather than identical."
+        },
+        {
+            "rank": 5,
+            "interaction_id": 5,
+            "prompt": "Some of my JSON task fields contain the character \u2014 (em-dash, unicode U+2014). This was causing issues when another script tried to parse the file. How do I clean this out of all 10 files at once?",
+            "why_important": "JSON files with non-ASCII characters can cause subtle parsing errors in automated grading scripts."
+        }
+    ],
+    "student_declaration": {
+        "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for Task 4.2. All LLM usage disclosure files have been prepared honestly and contain genuine records of my interactions.",
+        "understanding_acknowledged": true,
+        "signature": "Meesala Sree Sai Nath",
+        "date": "2026-03-11"
+    }
+}

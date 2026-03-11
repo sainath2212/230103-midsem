@@ -1,0 +1,129 @@
+{
+    "student_metadata": {
+        "name": "Meesala Sree Sai Nath",
+        "roll_number": "230103",
+        "course": "Advanced Machine Learning",
+        "exam": "Mid-Semester Examination",
+        "part": "Part B",
+        "task": "Task 4.1 - Report",
+        "submission_date": "2026-03-11",
+        "primary_ai_model": "Claude Sonnet 4.6"
+    },
+    "llm_tools_used": [
+        {
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "provider": "Anthropic"
+        }
+    ],
+    "full_llm_interaction_log": [
+        {
+            "interaction_id": 1,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.1",
+            "purpose": "Setting up the IEEE LaTeX document structure correctly",
+            "prompt": "How do I configure a LaTeX file to use the IEEE conference format with exactly 10pt font and 1-inch margins? I need to enforce both constraints simultaneously.",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided the exact preamble: \\documentclass[conference,10pt]{IEEEtran} combined with \\usepackage[margin=1in]{geometry}.",
+            "student_verification": "Compiled the document and verified 10pt body text and 1-inch margins in the PDF output.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 2,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.1",
+            "purpose": "Embedding generated matplotlib figures into a two-column IEEE report",
+            "prompt": "I have a PNG saved to results/accuracy_evolution.png. What is the correct LaTeX to include it as a single-column figure with a caption at the correct width?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Provided the standard figure block: \\begin{figure}[htbp] with \\centerline{\\includegraphics[width=\\linewidth]{...}} and a \\caption followed by \\label.",
+            "student_verification": "Verified the figure appears at the correct width in the compiled PDF without overflowing the column.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 3,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.1",
+            "purpose": "Formatting mathematical equations formally in the report",
+            "prompt": "I want to include the primal SVM objective and the RBF kernel formula as numbered equations in my IEEE report. What is the correct LaTeX math environment to use?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Showed the \\begin{equation} ... \\end{equation} block with amsmath package. Also explained how to use \\frac, \\sum, and \\| \\| for norms.",
+            "student_verification": "Both equations compiled correctly and the numbering is automatic.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        },
+        {
+            "interaction_id": 4,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.1",
+            "purpose": "Debugging a table layout collision in LaTeX",
+            "prompt": "My Table 1 in LaTeX is visually colliding with the paragraph text above it. The table appears to be floating too close to the end of the preceding paragraph. How do I fix this?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Identified that the preceding paragraph had duplicate text which pushed the table up into the text flow. Suggested removing the duplicate and adding \\vspace{0.2cm} below the table.",
+            "student_verification": "After the fix, the table renders cleanly with correct white space separation.",
+            "code_used_verbatim": false,
+            "confidence_level": 4
+        },
+        {
+            "interaction_id": 5,
+            "date": "2026-03-11",
+            "tool_name": "Claude",
+            "model": "Claude Sonnet 4.6",
+            "task_tag": "Task 4.1",
+            "purpose": "Expanding the reflection section to reach 4 pages",
+            "prompt": "My report is 3.2 pages. I need to reach 4 pages without padding. What are substantive observations about the BSGD method I could add to the Reflection section?",
+            "llm_response_used": "Partially",
+            "how_it_helped": "Suggested discussing: the non-linear collapse of generalisation as budget drops, why projection is slower than merge despite similar accuracy (Woodbury vs. nearest-neighbour search), and Forgetron as an alternative approach.",
+            "student_verification": "Added these observations and confirmed the document reached 4 pages in the compiled PDF.",
+            "code_used_verbatim": false,
+            "confidence_level": 5
+        }
+    ],
+    "top_5_prompts": [
+        {
+            "rank": 1,
+            "interaction_id": 1,
+            "prompt": "How do I configure a LaTeX file to use the IEEE conference format with exactly 10pt font and 1-inch margins? I need to enforce both constraints simultaneously.",
+            "why_important": "The instructions specified exact formatting constraints that had to be met for the report to be valid."
+        },
+        {
+            "rank": 2,
+            "interaction_id": 2,
+            "prompt": "I have a PNG saved to results/accuracy_evolution.png. What is the correct LaTeX to include it as a single-column figure with a caption at the correct width?",
+            "why_important": "All 9 result plots needed to appear in the report, requiring correct LaTeX figure syntax."
+        },
+        {
+            "rank": 3,
+            "interaction_id": 3,
+            "prompt": "I want to include the primal SVM objective and the RBF kernel formula as numbered equations in my IEEE report. What is the correct LaTeX math environment to use?",
+            "why_important": "Adding formal equations gives the report mathematical density and demonstrates understanding beyond just describing results."
+        },
+        {
+            "rank": 4,
+            "interaction_id": 4,
+            "prompt": "My Table 1 in LaTeX is visually colliding with the paragraph text above it. The table appears to be floating too close to the end of the preceding paragraph. How do I fix this?",
+            "why_important": "Visual clarity in the report directly affects the grade for the report task."
+        },
+        {
+            "rank": 5,
+            "interaction_id": 5,
+            "prompt": "My report is 3.2 pages. I need to reach 4 pages without padding. What are substantive observations about the BSGD method I could add to the Reflection section?",
+            "why_important": "The page limit is a maximum not a target, but fuller pages demonstrate more thorough analysis."
+        }
+    ],
+    "student_declaration": {
+        "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for Task 4.1. The report content, including the honest reflection section, represents my own experience and findings from working on this assignment.",
+        "understanding_acknowledged": true,
+        "signature": "Meesala Sree Sai Nath",
+        "date": "2026-03-11"
+    }
+}
